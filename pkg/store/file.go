@@ -8,6 +8,9 @@ import (
 type Store interface {
 	Read(data interface{}) error
 	Write(data interface{}) error
+	//mockStore
+	//AddMock(mock *Mock)
+	//ClearMock()
 }
 
 //alias de string
@@ -20,16 +23,40 @@ const (
 func New(store Type, fileName string) Store {
 	switch store {
 	case FileType:
-		return &FileStore{fileName}
+		return &FileStore{fileName, nil}
 	}
 	return nil
 }
 
 type FileStore struct {
 	FileName string
+	//mockStore
+	Mock *Mock
+}
+
+//mockStore
+type Mock struct {
+	Data []byte
+	Err  error
+}
+
+func (fs *FileStore) AddMock(mock *Mock) {
+	fs.Mock = mock
+}
+
+func (fs *FileStore) ClearMock() {
+	fs.Mock = nil
 }
 
 func (fs *FileStore) Read(data interface{}) error {
+	//mockStore
+	if fs.Mock != nil {
+		if fs.Mock.Err != nil {
+			return fs.Mock.Err
+		}
+		return json.Unmarshal(fs.Mock.Data, data)
+	}
+
 	file, err := os.ReadFile(fs.FileName)
 	if err != nil {
 		return err
@@ -38,6 +65,11 @@ func (fs *FileStore) Read(data interface{}) error {
 }
 
 func (fs *FileStore) Write(data interface{}) error {
+	//mockStore
+	if fs.Mock != nil {
+		return fs.Mock.Err
+	}
+
 	fileData, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
 		return err

@@ -72,3 +72,7 @@ func (s *service) UpdateName(id int, nombre string) (Usuarios, error) {
 func (s *service) Delete(id int) error {
 	return s.repository.Delete(id)
 }
+
+func (s *service) Get(id int) (Usuarios, error) {
+	return s.repository.Get(id)
+}

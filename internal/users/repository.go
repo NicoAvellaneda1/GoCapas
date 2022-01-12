@@ -27,6 +27,7 @@ type Repository interface {
 	Update(id int, nombre string, apellido string, email string, edad int, altura float64, activo bool, fechaCreacion string) (Usuarios, error)
 	UpdateName(id int, nombre string) (Usuarios, error)
 	Delete(id int) error
+	Get(id int) (Usuarios, error)
 }
 
 type repository struct {
@@ -139,4 +140,26 @@ func (r *repository) Delete(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (r *repository) Get(id int) (Usuarios, error) {
+	var usuarios []Usuarios
+	r.db.Read(&usuarios)
+	var us Usuarios
+	encontrado := false
+	for i := range usuarios {
+		if usuarios[i].Id == id {
+			encontrado = true
+			us = usuarios[i]
+		}
+	}
+	if !encontrado {
+		return Usuarios{}, fmt.Errorf("Usuario %d no encontrado", id)
+	}
+
+	if err := r.db.Write(usuarios); err != nil {
+		return Usuarios{}, err
+	}
+
+	return us, nil
 }
