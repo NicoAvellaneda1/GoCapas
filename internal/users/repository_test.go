@@ -13,7 +13,7 @@ type storeMock struct {
 }
 
 func (s *storeMock) Read(data interface{}) error {
-	json.Unmarshal(s.Data, &data)
+	_ = json.Unmarshal(s.Data, &data)
 
 	return nil
 }
@@ -47,7 +47,10 @@ type storeSpy struct {
 
 func (s *storeSpy) Read(data interface{}) error {
 	s.BanderaRead = true
-	json.Unmarshal(s.Data, &data)
+	err := json.Unmarshal(s.Data, &data)
+	if err != nil {
+		return nil
+	}
 
 	return nil
 }

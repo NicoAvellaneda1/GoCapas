@@ -2,7 +2,7 @@
  {
   "id": 1,
   "nombre": "Juan",
-  "apellido": "Perez",
+  "apellido": "Gomez",
   "email": "jose@perez.com",
   "edad": 45,
   "altura": 1.65,
@@ -12,16 +12,6 @@
  {
   "id": 2,
   "nombre": "Miguelo",
-  "apellido": "Perez",
-  "email": "jose@perez.com",
-  "edad": 45,
-  "altura": 1.65,
-  "activo": true,
-  "fechaCreacion": "2021-12-14"
- },
- {
-  "id": 4,
-  "nombre": "Jose",
   "apellido": "Perez",
   "email": "jose@perez.com",
   "edad": 45,

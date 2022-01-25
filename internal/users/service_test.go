@@ -69,3 +69,18 @@ func TestDeleteError(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, expectedError, err)
 }
+
+func TestGetAllService(t *testing.T) {
+	us1 := Usuarios{1, "Juan", "Perez", "jose@perez.com", 45, 1.65, true, "2021-12-14"}
+	us2 := Usuarios{2, "Miguelo", "Perez", "jose@perez.com", 45, 1.65, true, "2021-12-14"}
+	us := []Usuarios{us1, us2}
+
+	usJson, _ := json.Marshal(us)
+
+	repo := repository{db: &storeMock{Data: usJson}}
+	service := service{repository: &repo}
+	us, err := service.GetAll()
+
+	assert.Equal(t, 2, len(us))
+	assert.Equal(t, err, nil)
+}

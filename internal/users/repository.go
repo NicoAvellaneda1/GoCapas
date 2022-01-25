@@ -42,13 +42,19 @@ func NewRepository(db store.Store) Repository {
 
 func (r *repository) GetAll() ([]Usuarios, error) {
 	var usuarios []Usuarios
-	r.db.Read(&usuarios)
+	err := r.db.Read(&usuarios)
+	if err != nil {
+		return nil, err
+	}
 	return usuarios, nil
 }
 
 func (r *repository) Store(id int, nombre string, apellido string, email string, edad int, altura float64, activo bool, fechaCreacion string) ([]Usuarios, error) {
 	var usuarios []Usuarios
-	r.db.Read(&usuarios)
+	err := r.db.Read(&usuarios)
+	if err != nil {
+		return nil, err
+	}
 	us := Usuarios{id, nombre, apellido, email, edad, altura, activo, fechaCreacion}
 	usuarios = append(usuarios, us)
 	if err := r.db.Write(usuarios); err != nil {
@@ -94,7 +100,10 @@ func (r *repository) Update(id int, nombre string, apellido string, email string
 
 func (r *repository) UpdateName(id int, name string) (Usuarios, error) {
 	var usuarios []Usuarios
-	r.db.Read(&usuarios)
+	err := r.db.Read(&usuarios)
+	if err != nil {
+		return Usuarios{}, err
+	}
 	var us Usuarios
 	update := false
 	for i := range usuarios {
@@ -144,7 +153,10 @@ func (r *repository) Delete(id int) error {
 
 func (r *repository) Get(id int) (Usuarios, error) {
 	var usuarios []Usuarios
-	r.db.Read(&usuarios)
+	err := r.db.Read(&usuarios)
+	if err != nil {
+		return Usuarios{}, err
+	}
 	var us Usuarios
 	encontrado := false
 	for i := range usuarios {
